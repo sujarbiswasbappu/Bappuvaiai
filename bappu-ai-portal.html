@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bappu.Ai Premium Access Portal</title>
+<style>
+  :root {
+    --black: #0a0304;
+    --burgundy: #3d0810;
+    --crimson: #8f0f1e;
+    --red: #e11d2e;
+    --white: #f6f4f4;
+    --silver: #aeb3bd;
+    --glass: rgba(255, 255, 255, 0.04);
+    --line: rgba(225, 29, 46, 0.35);
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--white);
+    background:
+      radial-gradient(900px 500px at 15% -10%, rgba(225,29,46,.28), transparent 60%),
+      radial-gradient(700px 500px at 110% 30%, rgba(143,15,30,.35), transparent 60%),
+      linear-gradient(180deg, var(--burgundy), var(--black) 60%);
+    background-attachment: fixed;
+    line-height: 1.55;
+  }
+  .wrap { width: min(980px, 92vw); margin: 0 auto; padding-bottom: 48px; }
+  header { display: flex; justify-content: space-between; align-items: center; padding: 22px 0; }
+  .brand { font-family: Georgia, "Times New Roman", serif; font-size: 1.5rem; letter-spacing: .04em; margin: 0; }
+  .brand span { color: var(--red); }
+  .credit { font-size: .85rem; color: var(--silver); }
+
+  .card {
+    background: var(--glass);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: clamp(20px, 4vw, 36px);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 40px rgba(225,29,46,.18), inset 0 1px 0 rgba(255,255,255,.05);
+    margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(2rem, 6vw, 3.4rem);
+    line-height: 1.1;
+    margin: .2rem 0 .6rem;
+  }
+  .tag { color: var(--silver); font-size: .95rem; margin: 0 0 1rem; }
+  .price { font-size: 1.6rem; font-weight: 700; margin: 1rem 0; }
+  .price small { font-size: .9rem; color: var(--silver); font-weight: 400; }
+
+  .btn {
+    display: inline-block;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 24px;
+    font: inherit;
+    font-weight: 700;
+    color: var(--white);
+    background: linear-gradient(135deg, var(--red), var(--crimson));
+    box-shadow: 0 8px 24px rgba(225,29,46,.4);
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(225,29,46,.55); }
+  .btn:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid var(--silver); outline-offset: 3px; }
+  .btn:disabled { opacity: .6; cursor: wait; transform: none; }
+
+  .number {
+    font-size: clamp(1.8rem, 6vw, 2.6rem);
+    font-weight: 700;
+    letter-spacing: .06em;
+    margin: .3rem 0 1rem;
+    font-variant-numeric: tabular-nums;
+  }
+  ol.steps { padding-left: 1.2rem; color: var(--silver); }
+  ol.steps li { margin: .35rem 0; }
+  .note { font-size: .85rem; color: var(--silver); }
+
+  form { display: grid; gap: 14px; }
+  label { display: grid; gap: 6px; font-size: .9rem; color: var(--silver); }
+  input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="datetime-local"] {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(0,0,0,.4);
+    color: var(--white);
+    font: inherit;
+  }
+  .check { display: flex; gap: 10px; align-items: flex-start; font-size: .9rem; color: var(--silver); }
+  .msg { min-height: 1.4em; font-size: .95rem; }
+  .ok { color: #7ee2a8; }
+  .bad { color: #ff7a85; }
+
+  .pw-row { position: relative; }
+  .pw-row input { padding-right: 56px; }
+  .eye {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; color: var(--silver); cursor: pointer; padding: 8px; font: inherit;
+  }
+  .spinner {
+    display: inline-block; width: 14px; height: 14px; margin-right: 8px;
+    border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%;
+    vertical-align: -2px; animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .hidden { display: none !important; }
+  .arena {
+    display: inline-block; margin: 14px 0; font-size: 1.15rem; padding: 18px 30px;
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse { 50% { box-shadow: 0 0 0 10px rgba(225,29,46,0); } 0% { box-shadow: 0 0 0 0 rgba(225,29,46,.45); } }
+  .link { color: var(--silver); word-break: break-all; }
+  footer { border-top: 1px solid rgba(255,255,255,.08); padding-top: 22px; font-size: .85rem; color: var(--silver); }
+  footer nav a { color: var(--silver); margin-right: 14px; text-decoration: none; }
+  footer nav a:hover { color: var(--white); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h2 class="brand">BAPPU<span>.AI</span></h2>
+    <div class="credit">Created by Sujar Biswas Bappu</div>
+  </header>
+
+  <!-- HERO -->
+  <section class="card hero">
+    <div class="tag">Premium AI Access Portal</div>
+    <h1>Unlock your AI experience with Bappu.Ai.</h1>
+    <p class="tag">Explore an extensive AI experience through one convenient access portal.</p>
+    <div class="price">৳100 <small>One-Time Payment</small></div>
+    <a class="btn" href="#payment">GET PREMIUM ACCESS</a>
+  </section>
+
+  <!-- PAYMENT -->
+  <section class="card" id="payment">
+    <h2>UNLOCK PREMIUM ACCESS</h2>
+    <p class="tag">Pay ৳100 through bKash and submit your transaction details to request your access password.</p>
+    <div class="note">Payment method: bKash · Account type: Personal · Amount: ৳100</div>
+    <div class="number" id="bkashNumber">01880372823</div>
+    <button class="btn" id="copyBtn" type="button">COPY BKASH NUMBER</button>
+    <p id="copyMsg" class="msg" role="status" aria-live="polite"></p>
+
+    <ol class="steps">
+      <li>Open the bKash app.</li>
+      <li>Send ৳100 to the number above using Send Money.</li>
+      <li>Complete the transaction and save the Transaction ID.</li>
+      <li>Return to this website.</li>
+      <li>Submit your payment details for verification below.</li>
+      <li>Receive your access password after the administrator verifies your payment.</li>
+    </ol>
+
+    <h3>PAYMENT VERIFICATION FORM</h3>
+    <form id="verifyForm" novalidate>
+      <label>Customer name <input type="text" name="name" required maxlength="100" autocomplete="name"></label>
+      <label>Customer email or contact number <input type="text" name="contact" required maxlength="120"></label>
+      <label>bKash sender number <input type="text" name="sender" required maxlength="20" inputmode="numeric"></label>
+      <label>Transaction ID <input type="text" name="txid" required maxlength="40"></label>
+      <label>Payment amount (৳) <input type="number" name="amount" required min="1" step="1" value="100"></label>
+      <label>Payment date and time <input type="datetime-local" name="when" required></label>
+      <label class="check"><input type="checkbox" name="confirm" required> I confirm that the submitted payment information is accurate.</label>
+      <div><button class="btn" type="submit" id="submitBtn">SUBMIT PAYMENT FOR VERIFICATION</button></div>
+      <p id="formMsg" class="msg" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <!-- ACCESS CODE -->
+  <section class="card" id="access">
+    <h2>ENTER YOUR ACCESS CODE</h2>
+    <p class="tag">Already have an access code? Enter it below to unlock the portal.</p>
+    <form id="loginForm" novalidate>
+      <label>Access code
+        <span class="pw-row">
+          <input type="password" id="pw" name="pw" placeholder="Enter your password" autocomplete="current-password" required>
+          <button type="button" class="eye" id="eye" aria-label="Show or hide password">Show</button>
+        </span>
+      </label>
+      <div><button class="btn" type="submit" id="unlockBtn">UNLOCK ACCESS</button></div>
+      <p id="loginMsg" class="msg" role="alert" aria-live="assertive"></p>
+    </form>
+  </section>
+
+  <!-- SUCCESS (hidden until unlocked) -->
+  <section class="card hidden" id="granted">
+    <h2>ACCESS GRANTED</h2>
+    <p class="tag">Welcome to Bappu.Ai Premium Access Portal · Created by Sujar Biswas Bappu</p>
+    <p>Your access has been verified. You can now continue to the external AI Arena website.</p>
+    <a class="btn arena" href="https://arena.ai/code" target="_blank" rel="noopener noreferrer">ক্লিক করুন — OPEN AI ARENA</a>
+    <p class="link">https://arena.ai/code</p>
+    <p class="note">You are leaving Bappu.Ai and opening an external website. Access, available models, usage limits, and account requirements are controlled by the external service.</p>
+    <button class="btn" id="logoutBtn" type="button" style="background:none;box-shadow:none;border:1px solid var(--line);">LOG OUT</button>
+  </section>
+
+  <footer>
+    <div><strong>Bappu.Ai</strong> · Created by Sujar Biswas Bappu</div>
+    <nav>
+      <a href="#payment">Payment Instructions</a>
+      <a href="#access">Access Portal</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms and Conditions</a>
+      <a href="#">Contact</a>
+    </nav>
+    <p>Bappu.Ai is an independent access portal. External services are subject to their own terms, policies, availability, and usage restrictions.</p>
+  </footer>
+</div>
+
+<script>
+  // PROTOTYPE ONLY: real code checks must run on the server (see deployment notes).
+  const DEV_CODE = "507242";
+
+  // Copy number
+  document.getElementById("copyBtn").addEventListener("click", async () => {
+    const num = document.getElementById("bkashNumber").textContent.trim();
+    const msg = document.getElementById("copyMsg");
+    try {
+      await navigator.clipboard.writeText(num);
+      msg.className = "msg ok";
+      msg.textContent = "bKash number copied.";
+    } catch {
+      msg.className = "msg bad";
+      msg.textContent = "Copy failed. Please copy the number manually.";
+    }
+  });
+
+  // Payment verification form: records a pending request only; never approves.
+  document.getElementById("verifyForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const f = e.target;
+    const msg = document.getElementById("formMsg");
+    if (!f.checkValidity()) {
+      f.reportValidity();
+      msg.className = "msg bad";
+      msg.textContent = "Please fill in every field and tick the confirmation box.";
+      return;
+    }
+    const ref = "BAP-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+    msg.className = "msg ok";
+    msg.textContent = `Your payment verification request has been submitted (reference ${ref}). Your access password will be provided after the administrator confirms your payment.`;
+    f.reset();
+  });
+
+  // Show/hide password
+  const pw = document.getElementById("pw");
+  document.getElementById("eye").addEventListener("click", (e) => {
+    const show = pw.type === "password";
+    pw.type = show ? "text" : "password";
+    e.currentTarget.textContent = show ? "Hide" : "Show";
+  });
+
+  // Access check with loading state and simple attempt limit
+  let attempts = 0, lockedUntil = 0;
+  document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const msg = document.getElementById("loginMsg");
+    const btn = document.getElementById("unlockBtn");
+    if (Date.now() < lockedUntil) {
+      msg.className = "msg bad";
+      msg.textContent = "Too many attempts. Please wait a minute and try again.";
+      return;
+    }
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Verifying';
+    await new Promise(r => setTimeout(r, 700));
+    btn.disabled = false;
+    btn.textContent = "UNLOCK ACCESS";
+
+    if (pw.value.trim() === DEV_CODE) {
+      attempts = 0;
+      msg.className = "msg ok";
+      msg.textContent = "Access verified.";
+      document.getElementById("granted").classList.remove("hidden");
+      document.getElementById("granted").scrollIntoView({ behavior: "smooth" });
+      pw.value = "";
+    } else {
+      attempts++;
+      if (attempts >= 5) { lockedUntil = Date.now() + 60000; attempts = 0; }
+      msg.className = "msg bad";
+      msg.textContent = "Invalid access code. Please check your password and try again.";
+    }
+  });
+
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+    document.getElementById("granted").classList.add("hidden");
+    document.getElementById("loginMsg").textContent = "";
+    document.getElementById("access").scrollIntoView({ behavior: "smooth" });
+  });
+</script>
+</body>
+</html>
